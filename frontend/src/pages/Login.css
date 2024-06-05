@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('C:\SRI Project\Stocksphere\frontend\src\image1.jpg');
+    background-image: url('../image1.jpg');
     background-size: cover;
   }
   
