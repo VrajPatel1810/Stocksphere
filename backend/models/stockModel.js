@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 const stockSchema = mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
+    },
     name: {
         type: String,
         required: true,
-        unique: true
     },
     price: {
         type: Number,

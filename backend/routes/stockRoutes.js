@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const { getStocks, setStock, updateStock, deleteStock } = require('../controllers/stockController');
+const { protect } = require('../middleware/authMiddleware');
 
-router.get('/', getStocks).post('/', setStock);
-router.put('/:id', updateStock).delete('/:id', deleteStock);
+router.get('/', protect, getStocks).post('/', protect, setStock);
+router.put('/:id', protect, updateStock).delete('/:id', protect, deleteStock);
 
 module.exports = router;

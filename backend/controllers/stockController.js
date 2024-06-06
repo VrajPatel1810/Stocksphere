@@ -1,10 +1,11 @@
 const asyncHandler = require('express-async-handler');
 
 const Stock = require('../models/stockModel');
+const User = require('../models/userModel');
 
 const getStocks = asyncHandler(async (req, res) => {
 
-    const stocks = await Stock.find();
+    const stocks = await Stock.find( { user: req.user.id } );
 
     res.status(200).json(stocks);
 })
@@ -18,7 +19,8 @@ const setStock = asyncHandler(async (req, res) => {
 
     const stock = await Stock.create({
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        user: req.user.id,
     });
 
     res.status(200).json(stock);
@@ -33,6 +35,20 @@ const updateStock = asyncHandler(async (req, res) => {
         throw new Error('Stock not found');
     }
 
+    const user = await User.findById(req.user.id);
+
+    // Check for user
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Make sure the logged in user is the owner of the stock
+    if (stock.user.toString() !== req.user.id) {
+        res.status(401);
+        throw new Error('User not authorized');
+    }
+
     const updatedStock = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
 
     res.status(200).json(updatedStock);
@@ -45,6 +61,20 @@ const deleteStock = asyncHandler(async (req, res) => {
     if (!stock) {
         res.status(404);
         throw new Error('Stock not found');
+    }
+
+    const user = await User.findById(req.user.id);
+
+    // Check for user
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Make sure the logged in user is the owner of the stock
+    if (stock.user.toString() !== req.user.id) {
+        res.status(401);
+        throw new Error('User not authorized');
     }
 
     await stock.deleteOne();
