@@ -1,9 +1,10 @@
+/* Login.css */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('C:\SRI Project\Stocksphere\frontend\src\image1.jpg');
+    background-image: url('../image1.jpg');
     background-size: cover;
   }
   
@@ -40,7 +41,7 @@
     color: #1e90ff;
     cursor: pointer;
   }
-
+  
   .forgot-password:hover {
     text-decoration: underline;
   }
@@ -73,3 +74,28 @@
   .btn:hover {
     background-color: #1e9b60;
   }
+  
+  .password-input-container {
+    position: relative;
+  }
+  
+  .toggle-password-btn {
+    position:absolute;
+    top:36%;
+    transform: translateY(-50%); /* Adjust for vertical centering */
+    right: 0px;
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .toggle-password-btn:focus {
+    outline: none;
+  }
+  
+  .toggle-password-btn i {
+    font-size: 16px;
+  }
+  

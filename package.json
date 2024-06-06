@@ -11,6 +11,7 @@
   "author": "Vraj and Nishith",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "colors": "^1.4.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",

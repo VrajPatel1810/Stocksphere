@@ -43,7 +43,7 @@ body {
   .hero-section {
     padding: 150px 20px;
     background-color: #1e1e1e;
-    background-image: url('C:\SRI Project\Stocksphere\frontend\srcimage1.jpg'); /* Replace with your image URL */
+    background-image: url('../image1.jpg'); /* Replace with your image URL */
     background-size: cover;
     background-position: center;
     color: #ffffff;

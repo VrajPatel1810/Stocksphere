@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('C:\SRI Project\Stocksphere\frontend\src\image1.jpg'); /* Replace 'your-background-image-url.jpg' with the URL of your background image */
+    background-image: url('../image1.jpg'); /* Replace 'your-background-image-url.jpg' with the URL of your background image */
     background-size: cover;
     background-position: center;
   }
@@ -40,13 +40,13 @@
   
   .toggle-password-btn {
     position: absolute;
-    right: 5px;
+    right: 0px;
     top: 50%;
     transform: translateY(-50%);
     background-color: transparent;
     border: none;
     cursor: pointer;
-    color: #777;
+    color: #000;
   }
   
   .name-inputs,
