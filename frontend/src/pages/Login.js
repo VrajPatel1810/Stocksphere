@@ -1,5 +1,6 @@
 // Login.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
@@ -9,23 +10,54 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  });
+
+  const { email, password } = formData;
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
         <h2>Login to StockSphere</h2>
-        <form>
-          <input type="text" placeholder="Username" />
-          <div className="password-input-container">
+        <form onSubmit={onSubmit}>
+          <div className="input-group">
             <input
-              type={showPassword ? 'text' : 'password'}
+              type="email"
+              placeholder="Email ID"
+              id="email"
+              value={email}
+              name="email"
+              onChange={onChange}
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
+              id="password"
+              value={password}
+              name="password"
+              onChange={onChange}
             />
             <button
               type="button"
-              className="toggle-password-btn"
               onClick={togglePasswordVisibility}
+              className="toggle-password-btn"
             >
-              <i className={showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'}></i>
+              <i className={showPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
             </button>
           </div>
           <div className="form-options">
@@ -34,7 +66,8 @@ function Login() {
           </div>
         </form>
         <div className="signup-link">
-          Don't have an account? <a href="/signup">Sign Up</a>
+          Don't have an account?
+          <Link to="/signup" className='signup-link'>Sign Up</Link>
         </div>
       </div>
     </div>

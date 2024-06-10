@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Home.css';
 
 function Home() {
@@ -7,9 +8,11 @@ function Home() {
       <header className="App-header">
         <div className="navbar">
           <div className="logo">StockSphere</div>
-          <div className="auth-button">
-            <button className="btn login-signup">Log In / Sign Up</button>
-          </div>
+          <Link to="/login">
+            <div className="auth-button">
+              <button className="btn login-signup">Log In / Sign Up</button>
+            </div>
+          </Link>
         </div>
         <div className="hero-section">
           <h1>Effortless Trading to Optimize Your Investments</h1>
