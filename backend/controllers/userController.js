@@ -4,10 +4,12 @@ const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 
 const registerUser =  asyncHandler(async(req, res) => {
+    console.log('Request Body:', req.body); // Check the request body in the console
 
-    const { name, email, password } = req.body;
+    const { firstName, middleName, lastName, email, phoneNumber, panCardNumber, aadharCardNumber, password, confirmPassword } = req.body;
 
-    if (!name || !email || !password) {
+    if (!firstName || !lastName || !phoneNumber || !panCardNumber || !aadharCardNumber || !confirmPassword || !email || !password) {
+        console.log('Invalid request:', req.body); // Add this line to log invalid request
         res.status(400);
         throw new Error('Please fill in all fields');
     }
@@ -26,7 +28,12 @@ const registerUser =  asyncHandler(async(req, res) => {
 
     //Create user
     const user = await User.create({
-        name,
+        firstName,
+        middleName,
+        lastName,
+        phoneNumber,
+        panCardNumber,
+        aadharCardNumber,
         email,
         password: hashedPassword
     });
@@ -34,7 +41,12 @@ const registerUser =  asyncHandler(async(req, res) => {
     if (user) {
         res.status(201).json({
             _id: user._id,
-            name: user.name,
+            firstName: user.firstName,
+            middleName: user.middleName,
+            lastName: user.lastName,
+            phoneNumber: user.phoneNumber,
+            panCardNumber: user.panCardNumber,
+            aadharCardNumber: user.aadharCardNumber,
             email: user.email,
             token: generateToken(user._id)
         });

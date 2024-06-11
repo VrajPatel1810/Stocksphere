@@ -1,18 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout, reset } from '../features/auth/authSlice';
 
 function Home() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.auth);
+
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate('/');
+  }
+
   return (
     <div className="App">
       <header className="App-header">
         <div className="navbar">
           <div className="logo">StockSphere</div>
+          
+          {user ? (
+            <div className="auth-button">
+              <button className="btn login-signup" onClick={onLogout}>Log Out</button>
+            </div>) : (
           <Link to="/login">
             <div className="auth-button">
               <button className="btn login-signup">Log In / Sign Up</button>
             </div>
-          </Link>
+          </Link>)}
         </div>
         <div className="hero-section">
           <h1>Effortless Trading to Optimize Your Investments</h1>

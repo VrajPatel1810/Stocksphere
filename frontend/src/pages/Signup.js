@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Signup.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { register, reset } from '../features/auth/authSlice';
+import Spinner from '../components/Spinner';
 
 function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,6 +24,23 @@ function Signup() {
 
   const { firstName, middleName, lastName, email, phoneNumber, panCardNumber, aadharCardNumber, password, confirmPassword } = formData;
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    } 
+
+    if (isSuccess || user) {
+      navigate('/');
+    }
+
+    dispatch(reset());
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -29,6 +51,24 @@ function Signup() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
+    } else {
+      const userData = {
+        firstName,
+        middleName,
+        lastName,
+        email,
+        phoneNumber,
+        panCardNumber,
+        aadharCardNumber,
+        password,
+        confirmPassword
+      };
+
+      dispatch(register(userData));
+    }
   };
 
   const onChange = (e) => {
@@ -37,6 +77,10 @@ function Signup() {
       [e.target.name]: e.target.value
     }));
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
 
   return (
     <div className="signup-container">
@@ -52,6 +96,7 @@ function Signup() {
                 value={firstName}
                 name="firstName"
                 onChange={onChange}
+                autoComplete="given-name"
               />
             </div>
             <div className="input-group">
@@ -62,6 +107,7 @@ function Signup() {
                 value={middleName}
                 name="middleName"
                 onChange={onChange}
+                autoComplete="additional-name"
               />
             </div>
             <div className="input-group">
@@ -72,6 +118,7 @@ function Signup() {
                 value={lastName}
                 name="lastName"
                 onChange={onChange}
+                autoComplete="family-name"
               />
             </div>
           </div>
@@ -84,6 +131,7 @@ function Signup() {
                 value={email}
                 name="email"
                 onChange={onChange}
+                autoComplete="email"
               />
             </div>
             <div className="input-group">
@@ -94,6 +142,7 @@ function Signup() {
                 value={phoneNumber}
                 name="phoneNumber"
                 onChange={onChange}
+                autoComplete="tel-national"
               />
             </div>
           </div>
@@ -106,6 +155,7 @@ function Signup() {
                 value={panCardNumber}
                 name="panCardNumber"
                 onChange={onChange}
+                autoComplete="off"
               />
             </div>
             <div className="input-group">
@@ -116,6 +166,7 @@ function Signup() {
                 value={aadharCardNumber}
                 name="aadharCardNumber"
                 onChange={onChange}
+                autoComplete="off"
               />
             </div>
           </div>
@@ -128,6 +179,7 @@ function Signup() {
                 value={password}
                 name="password"
                 onChange={onChange}
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -145,6 +197,7 @@ function Signup() {
                 value={confirmPassword}
                 name="confirmPassword"
                 onChange={onChange}
+                autoComplete="new-password"
               />
               <button
                 type="button"
@@ -155,7 +208,7 @@ function Signup() {
               </button>
             </div>
           </div>
-          <button className="btn signup-btn">Sign Up</button>
+          <button type='submit' className="btn signup-btn">Sign Up</button>
         </form>
       </div>
     </div>
