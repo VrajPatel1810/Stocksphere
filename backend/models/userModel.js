@@ -1,3 +1,4 @@
+const { reset } = require('colors');
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
@@ -32,6 +33,12 @@ const userSchema = mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    resetPasswordOTP: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     }
 },
     {

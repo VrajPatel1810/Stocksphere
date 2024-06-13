@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/userModel');
@@ -89,6 +91,77 @@ const getMe =  asyncHandler(async(req, res) => {
     });
 });
 
+// Generate and send OTP for password reset
+const requestPasswordReset = asyncHandler(async(req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    // Save OTP and expiry time in the database
+    user.resetPasswordOTP = otp;
+    user.resetPasswordExpires = Date.now() + 600000; // 10 minutes
+    await user.save();
+
+    // Send OTP to the user's email
+    const message = `Your OTP for password reset is ${otp}`;
+
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    const mailOptions = {
+        from: process.env.EMAIL,
+        to: user.email,
+        subject: 'Password Reset OTP',
+        text: message
+    };
+
+    transporter.sendMail(mailOptions, (err) => {
+        if (err) {
+            res.status(500);
+            throw new Error('Email could not be sent');
+        } else {
+            res.status(200).json({ message: 'OTP sent successfully' });
+        }
+    });
+});
+
+// Reset password
+const resetPassword = asyncHandler(async(req, res) => {
+    const { email, otp, password, confirmPassword } = req.body;
+
+    const user = await User.findOne({
+        email,
+        resetPasswordOTP: otp,
+        resetPasswordExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+        res.status(400);
+        throw new Error('Invalid or expired OTP');
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.status(200).json({ message: 'Password reset successful' });
+});
+
 // Generate JWT token
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -96,4 +169,4 @@ const generateToken = (id) => {
     });
 };
 
-module.exports = { registerUser, loginUser, getMe };
+module.exports = { registerUser, loginUser, getMe , requestPasswordReset, resetPassword };
