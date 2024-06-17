@@ -92,7 +92,7 @@ const getMe =  asyncHandler(async(req, res) => {
 });
 
 // Generate and send OTP for password reset
-const requestPasswordReset = asyncHandler(async(req, res) => {
+const requestOTP = asyncHandler(async(req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
 
@@ -137,8 +137,8 @@ const requestPasswordReset = asyncHandler(async(req, res) => {
     });
 });
 
-// Reset password
-const resetPassword = asyncHandler(async(req, res) => {
+// Verify OTP and reset password
+const verifyOTP = asyncHandler(async(req, res) => {
     const { email, otp, password, confirmPassword } = req.body;
 
     const user = await User.findOne({
@@ -162,6 +162,25 @@ const resetPassword = asyncHandler(async(req, res) => {
     res.status(200).json({ message: 'Password reset successful' });
 });
 
+// Reset password (if required in a different context)
+const resetPassword = asyncHandler(async(req, res) => {
+    const { email, newPassword } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(404);
+        throw new Error('User not found');
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.status(200).json({ message: 'Password reset successful' });
+});
+
 // Generate JWT token
 const generateToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -169,4 +188,4 @@ const generateToken = (id) => {
     });
 };
 
-module.exports = { registerUser, loginUser, getMe , requestPasswordReset, resetPassword };
+module.exports = { registerUser, loginUser, getMe , requestOTP, verifyOTP, resetPassword };

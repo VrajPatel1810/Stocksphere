@@ -95,7 +95,7 @@ function Login() {
           </div>
           <div className="form-options">
             <button type = 'submit' className="btn login-btn">Login</button>
-            <div className="forgot-password">Forgot Password?</div>
+            <Link to="/forgotpassword"><div className="forgot-password">Forgot Password?</div></Link>
           </div>
         </form>
         <div className="signup-link">

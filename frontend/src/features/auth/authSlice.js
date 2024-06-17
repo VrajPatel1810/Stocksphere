@@ -13,7 +13,7 @@ const initialState = {
 };
 
 // Register User
-export const register = createAsyncThunk('auth/signup', async (user, thunkAPI) => {
+export const register = createAsyncThunk('auth/register', async (user, thunkAPI) => {
     try {
         return await authService.register(user);
     } catch (error) {
@@ -32,11 +32,40 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
     }
 });
 
-// Logout
+// Logout User
 export const logout = createAsyncThunk('auth/logout', async () => {
     await authService.logout();
 });
 
+// Request OTP
+export const requestOtp = createAsyncThunk('auth/requestOtp', async (user, thunkAPI) => {
+    try {
+        return await authService.requestOtp(user);
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+
+// Verify OTP
+export const verifyOtp = createAsyncThunk('auth/verifyOtp', async (user, thunkAPI) => {
+    try {
+        return await authService.verifyOtp(user);
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+
+// Reset Password
+export const resetPassword = createAsyncThunk('auth/resetPassword', async (user, thunkAPI) => {
+    try {
+        return await authService.resetPassword(user);
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -81,6 +110,45 @@ export const authSlice = createSlice({
         })
         .addCase(logout.fulfilled, (state) => {
             state.user = null;
+        })
+        .addCase(requestOtp.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(requestOtp.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isSuccess = true;
+            state.message = action.payload.message;
+        })
+        .addCase(requestOtp.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload.message;
+        })
+        .addCase(verifyOtp.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(verifyOtp.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isSuccess = true;
+            state.message = action.payload.message;
+        })
+        .addCase(verifyOtp.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload.message;
+        })
+        .addCase(resetPassword.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(resetPassword.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isSuccess = true;
+            state.message = action.payload.message;
+        })
+        .addCase(resetPassword.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload.message;
         })
     }
 })
