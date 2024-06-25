@@ -11,6 +11,10 @@
   "author": "Vraj and Nishith",
   "license": "ISC",
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
+    "@mui/x-charts": "^7.7.1",
     "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.3",

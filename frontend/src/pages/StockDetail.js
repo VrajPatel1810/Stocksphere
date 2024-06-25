@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
+import { Typography, TextField, Button } from '@mui/material';
 import './StockDetail.css';
 
 function StockDetail() {
@@ -36,9 +37,10 @@ function StockDetail() {
         const res = await axios.get(`https://finnhub.io/api/v1/stock/candle?symbol=${symbol}&resolution=D&from=${oneYearAgo}&to=${now}&token=cpg5o4hr01qo2291i2b0cpg5o4hr01qo2291i2bg`);
         
         if (res.data.s === 'ok') {
-          setHistoricalData(res.data.c);
+          const data = res.data.c.map((price, index) => ({ x: index, y: price }));
+          setHistoricalData(data);
         } else {
-          console.error('Error fetching historical data');
+          console.error('Error fetching historical data:', res.data);
         }
       } catch (error) {
         console.error('Error fetching historical data', error);
@@ -58,37 +60,52 @@ function StockDetail() {
   if (!stock) return <div>Error loading stock details</div>;
 
   const data = {
-    labels: historicalData.map((_, index) => index),
     datasets: [
       {
-        label: `${stock.symbol} Price`,
         data: historicalData,
-        fill: false,
-        backgroundColor: 'rgba(75,192,192,1)',
-        borderColor: 'rgba(75,192,192,1)',
-      }
-    ]
+        label: `${symbol} Price`,
+        borderColor: '#3e98c7',
+      },
+    ],
   };
 
   return (
     <div className="stock-detail-container">
-      <h2>{stock.symbol}</h2>
-      <div className="stock-price">Price: ${stock.price}</div>
-      <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
+      <Typography variant="h2">{stock.symbol}</Typography>
+      <Typography variant="subtitle1">Price: ${stock.price}</Typography>
+      <Typography className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
         1D: {stock.changePercent}%
-      </div>
+      </Typography>
       <div className="chart-container">
-        <Line data={data} />
+        <Line
+          data={data}
+          options={{
+            scales: {
+              x: {
+                type: 'linear',
+              },
+              y: {
+                type: 'linear',
+              },
+            },
+          }}
+        />
       </div>
       <div className="buy-sell-container">
-        <input
+        <TextField
           type="number"
           value={buySellAmount}
           onChange={(e) => setBuySellAmount(e.target.value)}
           placeholder="Amount"
+          variant="outlined"
+          size="small"
         />
-        <button onClick={() => handleBuySell('Buy')}>Buy</button>
-        <button onClick={() => handleBuySell('Sell')}>Sell</button>
+        <Button variant="contained" color="primary" onClick={() => handleBuySell('Buy')}>
+          Buy
+        </Button>
+        <Button variant="contained" color="secondary" onClick={() => handleBuySell('Sell')}>
+          Sell
+        </Button>
       </div>
     </div>
   );
