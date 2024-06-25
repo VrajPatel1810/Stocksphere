@@ -1,0 +1,50 @@
+.stock-detail-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.stock-price,
+.stock-change {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.stock-change.positive {
+  color: #21bf73;
+}
+
+.stock-change.negative {
+  color: #e74c3c;
+}
+
+.chart-container {
+  margin: 20px auto;
+  width: 80%;
+}
+
+.buy-sell-container {
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.buy-sell-container input {
+  padding: 10px;
+  font-size: 1em;
+}
+
+.buy-sell-container button {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #21bf73;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+
+.buy-sell-container button:hover {
+  background-color: #1e9b60;
+}

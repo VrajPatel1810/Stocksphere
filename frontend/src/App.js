@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import ForgotPassword from "./pages/ForgotPassword";
 import VerifyOtp from "./pages/VerifyOtp";
 import ResetPassword from "./pages/ResetPassword";
+import StockDetail from "./pages/StockDetail";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,6 +23,7 @@ function App() {
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/verifyotp" element={<VerifyOtp />} />
             <Route path="/resetpassword" element={<ResetPassword />} />
+            <Route path="/stocks/:symbol" element={<StockDetail />} />
           </Routes>
         </div>
       </Router>

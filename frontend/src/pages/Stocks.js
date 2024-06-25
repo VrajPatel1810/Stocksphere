@@ -2,10 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Stocks.css';
 import { Link, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout, reset } from '../features/auth/authSlice';
 
 function Stocks() {
   const [stocks, setStocks] = useState([]);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -38,6 +43,12 @@ function Stocks() {
     fetchStocks();
   }, []);
 
+  const onLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate('/');
+  }
+
   return (
     <div className="stocks-container">
       <div className="navbar">
@@ -48,24 +59,26 @@ function Stocks() {
           <Link to="/stocks" className={`nav-link ${location.pathname === '/stocks' ? 'active' : ''}`}>Stocks</Link>
         </div>
         <div className="logout-button">
-          <button className="btn">Log Out</button>
+          <button className="btn" onClick={onLogout}>Log Out</button>
         </div>
       </div>
       <div className="stocks-content">
         <h2>Available Stocks</h2>
         <div className="stocks-list">
           {stocks.map(stock => (
-            <div key={stock.symbol} className="stock-item">
-              <div className="stock-left">
-                <div className="stock-name">{stock.description}</div>
-              </div>
-              <div className="stock-right">
-                <div className="stock-price">Price: ${stock.price}</div>
-                <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-                  1D: {stock.changePercent}%
+            <Link to={`/stocks/${stock.symbol}`} key={stock.symbol} className="stock-link">
+              <div key={stock.symbol} className="stock-item">
+                <div className="stock-left">
+                  <div className="stock-name">{stock.description}</div>
+                </div>
+                <div className="stock-right">
+                  <div className="stock-price">Price: ${stock.price}</div>
+                  <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
+                    1D: {stock.changePercent}%
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

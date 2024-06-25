@@ -35,10 +35,8 @@ const updateStock = asyncHandler(async (req, res) => {
         throw new Error('Stock not found');
     }
 
-    const user = await User.findById(req.user.id);
-
     // Check for user
-    if (!user) {
+    if (!req.user) {
         res.status(404);
         throw new Error('User not found');
     }
@@ -63,10 +61,8 @@ const deleteStock = asyncHandler(async (req, res) => {
         throw new Error('Stock not found');
     }
 
-    const user = await User.findById(req.user.id);
-
     // Check for user
-    if (!user) {
+    if (!req.user) {
         res.status(404);
         throw new Error('User not found');
     }
