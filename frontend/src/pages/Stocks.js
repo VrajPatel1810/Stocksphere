@@ -1,53 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Stocks.css';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout, reset } from '../features/auth/authSlice';
+import { getAllStocks } from '../features/stocks/stockSlice';
+import './Stocks.css';
+import Spinner from '../components/Spinner';
 
 function Stocks() {
-  const [stocks, setStocks] = useState([]);
-  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const { stocks, isLoading, isError, message } = useSelector((state) => state.stocks);
 
   useEffect(() => {
-    const fetchStocks = async () => {
-      try {
-        const response = await axios.get('https://finnhub.io/api/v1/stock/symbol?exchange=US&token=cpg5o4hr01qo2291i2b0cpg5o4hr01qo2291i2bg');
-        const stockSymbols = response.data.slice(0, 20).map(stock => stock.symbol); // Fetch 20 stocks
+    dispatch(getAllStocks());
+  }, [dispatch]);
 
-        const stockDetails = await Promise.all(
-          stockSymbols.map(async symbol => {
-            const res = await axios.get(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=cpg5o4hr01qo2291i2b0cpg5o4hr01qo2291i2bg`);
-            return {
-              symbol,
-              description: response.data.find(stock => stock.symbol === symbol).description,
-              price: parseFloat(res.data.c).toFixed(2),
-              change: parseFloat(res.data.d).toFixed(2),
-              changePercent: parseFloat(res.data.dp).toFixed(2)
-            };
-          })
-        );
-
-        // Filter out stocks with price zero
-        const validStocks = stockDetails.filter(stock => stock.price > 0);
-
-        setStocks(validStocks);
-      } catch (error) {
-        console.error('Error fetching stocks data', error);
-      }
-    };
-
-    fetchStocks();
-  }, []);
+  useEffect(() => {
+    if (isError) {
+      console.error(message);
+    }
+  }, [isError, message]);
 
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
     navigate('/');
-  }
+  };
 
   return (
     <div className="stocks-container">
@@ -65,21 +46,27 @@ function Stocks() {
       <div className="stocks-content">
         <h2>Available Stocks</h2>
         <div className="stocks-list">
-          {stocks.map(stock => (
-            <Link to={`/stocks/${stock.symbol}`} key={stock.symbol} className="stock-link">
-              <div key={stock.symbol} className="stock-item">
-                <div className="stock-left">
-                  <div className="stock-name">{stock.description}</div>
-                </div>
-                <div className="stock-right">
-                  <div className="stock-price">Price: ${stock.price}</div>
-                  <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-                    1D: {stock.changePercent}%
+          {isLoading ? (
+            <Spinner />
+          ) : isError ? (
+            <p>{message}</p>
+          ) : (
+            stocks.map((stock) => (
+              <Link to={`/stocks/${stock.symbol}`} key={stock._id} className="stock-link">
+                <div className="stock-item">
+                  <div className="stock-left">
+                    <div className="stock-name">{stock.name}</div>
+                  </div>
+                  <div className="stock-right">
+                    <div className="stock-price">Price: ${stock.price.toFixed(2)}</div>
+                    <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
+                      1D: {stock.changePercent.toFixed(2)}%
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          )}
         </div>
       </div>
     </div>

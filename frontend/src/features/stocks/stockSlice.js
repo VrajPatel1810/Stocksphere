@@ -9,6 +9,16 @@ const initialState = {
     message: '',
 };
 
+// Get all stocks
+export const getAllStocks = createAsyncThunk('stocks/getAllStocks', async (_, thunkAPI) => {
+    try {
+        return await stockService.getAllStocks();
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+
 // Buy stocks
 export const buyStock = createAsyncThunk('stocks/buyStock', async (stockData, thunkAPI) => {
     try {
@@ -61,7 +71,7 @@ export const stockSlice = createSlice({
             .addCase(buyStock.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.stocks.push(action.payload); // Assuming you want to add the new stock to the existing list
+                state.stocks.push(action.payload);
             })
             .addCase(buyStock.rejected, (state, action) => {
                 state.isLoading = false;
@@ -90,6 +100,19 @@ export const stockSlice = createSlice({
                 state.stocks = state.stocks.filter(stock => stock._id !== action.payload._id);
             })
             .addCase(sellStock.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload.message;
+            })
+            .addCase(getAllStocks.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getAllStocks.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.stocks = action.payload;
+            })
+            .addCase(getAllStocks.rejected, (state, action) => {
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload.message;
