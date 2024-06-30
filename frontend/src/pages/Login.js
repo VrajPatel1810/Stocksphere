@@ -33,7 +33,7 @@ function Login() {
     } 
 
     if (isSuccess || user) {
-      navigate('/stocks');
+      navigate('/');
     }
 
     dispatch(reset());

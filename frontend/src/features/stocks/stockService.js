@@ -30,6 +30,17 @@ const getStocks = async (token) => {
     return response.data;
 };
 
+// Get stocks by symbol
+const getStocksBySymbol = async (symbol, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    };
+    const response = await axios.get(API_URL + symbol, config);
+    return response.data;
+};
+
 // Sell stock
 const sellStock = async (stockId, token) => {
     const config = {
@@ -46,4 +57,5 @@ export default {
     getStocks,
     sellStock,
     getAllStocks,
+    getStocksBySymbol,
 };

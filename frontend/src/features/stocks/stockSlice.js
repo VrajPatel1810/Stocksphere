@@ -31,10 +31,21 @@ export const buyStock = createAsyncThunk('stocks/buyStock', async (stockData, th
 });
 
 // Get stocks
-export const getStocks = createAsyncThunk('stocks/getStocks', async (_, thunkAPI) => {
+export const getStocks = createAsyncThunk('stocks/getStock', async (_, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
         return await stockService.getStocks(token);
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue({ message });
+    }
+});
+
+// Get stocks by symbol
+export const getStocksBySymbol = createAsyncThunk('stocks/getStocksBySymbol', async (symbol, thunkAPI) => {
+    try {
+        const token = thunkAPI.getState().auth.user.token;
+        return await stockService.getStocksBySymbol(symbol, token);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue({ message });
@@ -116,7 +127,21 @@ export const stockSlice = createSlice({
                 state.isLoading = false;
                 state.isError = true;
                 state.message = action.payload.message;
+            })
+            .addCase(getStocksBySymbol.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getStocksBySymbol.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.stocks = action.payload;
+            })
+            .addCase(getStocksBySymbol.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.message = action.payload.message;
             });
+
     },
 });
 

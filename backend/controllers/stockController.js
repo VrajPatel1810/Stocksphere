@@ -1,27 +1,36 @@
 const asyncHandler = require('express-async-handler');
 const Stock = require('../models/stockModel');
 const User = require('../models/userModel');
+const allStock = require('../models/allstockModel');
 
 const getAllStocks = asyncHandler(async (req, res) => {
-    const stocks = await Stock.find();
-    res.status(200).json(stocks);
+    const allstocks = await allStock.find();
+    res.status(200).json(allstocks);
 });
 
 const getStockBySymbol = asyncHandler(async (req, res) => {
     const { symbol } = req.params;
-    const stock = await Stock.findOne({ symbol });
-  
-    if (!stock) {
-      res.status(404);
-      throw new Error('Stock not found');
+    const stocks = await allStock.find({ name: symbol });
+
+    if (!stocks) {
+        res.status(404);
+        throw new Error('Stock not found');
     }
-  
-    res.status(200).json(stock);
-  });
+
+    res.status(200).json(stocks);
+});
 
 const getStocks = asyncHandler(async (req, res) => {
-    const stocks = await Stock.find({ user: req.user.id });
-    res.status(200).json(stocks);
+
+    const userId = req.user.id;
+    const stocks = await Stock.find({ user: userId });
+
+    if (stocks && stocks.length > 0) {
+        res.status(200).json(stocks);
+    } else {
+        res.status(404);
+        throw new Error('Stock not found');
+    }
 });
 
 const setStock = asyncHandler(async (req, res) => {

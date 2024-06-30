@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import './Stocks.css'; // Reuse the same CSS for consistency
-import { Link, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../features/auth/authSlice';
 import { getStocks, reset } from '../features/stocks/stockSlice';
 import Spinner from '../components/Spinner';
+import './Stocks.css'; // Reuse the same CSS for consistency
 
 function Portfolio() {
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { user } = useSelector(state => state.auth);
-    const { stocks, isLoading, isError, message } = useSelector(state => state.stocks);
+    const { user } = useSelector((state) => state.auth);
+    const { stocks, isLoading, isError, message } = useSelector((state) => state.stocks);
 
     useEffect(() => {
         if (isError) {
@@ -30,7 +27,7 @@ function Portfolio() {
 
         return () => {
             dispatch(reset());
-        }
+        };
     }, [isError, message, user, dispatch, navigate]);
 
     if (isLoading) {
@@ -41,7 +38,7 @@ function Portfolio() {
         dispatch(logout());
         dispatch(reset());
         navigate('/');
-    }
+    };
 
     return (
         <div className="stocks-container">
@@ -59,18 +56,18 @@ function Portfolio() {
             <div className="stocks-content">
                 <h2>My Portfolio</h2>
                 <div className="stocks-list">
-                    {stocks.map(stock => (
-                            <div key={stock.symbol} className="stock-item">
-                                <div className="stock-left">
-                                    <div className="stock-name">{stock.description}</div>
-                                </div>
-                                <div className="stock-right">
-                                    <div className="stock-price">Price: ${stock.price}</div>
-                                    <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-                                        1D: {stock.changePercent}%
-                                    </div>
-                                </div>
+                    {stocks.map((stock) => (
+                        <div key={stock._id} className="stock-item">
+                            <div className="stock-left">
+                                <div className="stock-name">{stock.name}</div>
                             </div>
+                            <div className="stock-right">
+                                <div className="stock-price">Price: ${stock.price}</div>
+                                {/* <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
+                                    1D: {stock.changePercent}%
+                                </div> */}
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
