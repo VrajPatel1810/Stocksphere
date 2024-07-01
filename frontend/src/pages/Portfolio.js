@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../features/auth/authSlice';
-import { getStocks, reset } from '../features/stocks/stockSlice';
+import { getStocks, sellStock, reset } from '../features/stocks/stockSlice';
 import Spinner from '../components/Spinner';
-import './Stocks.css'; // Reuse the same CSS for consistency
+import Navbar from '../components/Navbar';
+import './Portfolio.css';
 
 function Portfolio() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const location = useLocation();
 
     const { user } = useSelector((state) => state.auth);
     const { stocks, isLoading, isError, message } = useSelector((state) => state.stocks);
+
+    const [sellQuantities, setSellQuantities] = useState(0);
 
     useEffect(() => {
         if (isError) {
@@ -34,25 +35,16 @@ function Portfolio() {
         return <Spinner />;
     }
 
-    const onLogout = () => {
-        dispatch(logout());
-        dispatch(reset());
-        navigate('/');
+    const handleSellStock = (stockId, quantity) => {
+        if (quantity >= 1 && quantity <= stocks.find(stock => stock._id === stockId).quantity) {
+            // console.log(stockId, quantity);
+            dispatch(sellStock({ stockId, quantity }));
+        }
     };
 
     return (
         <div className="stocks-container">
-            <div className="navbar">
-                <div className="logo">StockSphere</div>
-                <div className="nav-links">
-                    <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
-                    <Link to="/portfolio" className={`nav-link ${location.pathname === '/portfolio' ? 'active' : ''}`}>My Portfolio</Link>
-                    <Link to="/stocks" className={`nav-link ${location.pathname === '/stocks' ? 'active' : ''}`}>Stocks</Link>
-                </div>
-                <div className="logout-button">
-                    <button className="btn" onClick={onLogout}>Log Out</button>
-                </div>
-            </div>
+            <Navbar />
             <div className="stocks-content">
                 <h2>My Portfolio</h2>
                 <div className="stocks-list">
@@ -63,9 +55,25 @@ function Portfolio() {
                             </div>
                             <div className="stock-right">
                                 <div className="stock-price">Price: ${stock.price}</div>
-                                {/* <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-                                    1D: {stock.changePercent}%
-                                </div> */}
+                                <div className="stock-quantity">Quantity: {stock.quantity}</div>
+                                <form 
+                                    onSubmit={(e) => {
+                                        e.preventDefault();
+                                        handleSellStock(stock._id, sellQuantities[stock._id]);
+                                    }} 
+                                    className="sell-stock-form"
+                                >
+                                    <label htmlFor={`quantity-${stock._id}`}>Sell Quantity:</label>
+                                    <input
+                                        type="number"
+                                        id={`quantity-${stock._id}`}
+                                        value={sellQuantities[stock._id] || ''}
+                                        onChange={(e) => setSellQuantities({ ...sellQuantities, [stock._id]: Math.max(1, Math.min(e.target.value, stock.quantity)) })}
+                                        min="1"
+                                        max={stock.quantity}
+                                    />
+                                    <button type="submit" className="btn">Sell</button>
+                                </form>
                             </div>
                         </div>
                     ))}

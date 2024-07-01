@@ -33,8 +33,8 @@ const getStocks = asyncHandler(async (req, res) => {
     }
 });
 
-const setStock = asyncHandler(async (req, res) => {
-    if (!req.body.name || !req.body.price) {
+const buyStock = asyncHandler(async (req, res) => {
+    if (!req.body.name || !req.body.price || !req.body.quantity) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
@@ -42,53 +42,69 @@ const setStock = asyncHandler(async (req, res) => {
         return res.status(401).json({ message: 'User not authorized' });
     }
 
-    const stock = await Stock.create({
-        name: req.body.name,
-        price: req.body.price,
-        user: req.user.id,
-    });
+    const stockName = req.body.name;
+    const stockPrice = req.body.price;
+    const stockQuantity = req.body.quantity;
+    const stockChange = req.body.change || 0; // Set default value if not provided
+    const stockChangePercent = req.body.changePercent || 0; // Set default value if not provided
 
-    res.status(200).json(stock);
+    let existingStock = await Stock.findOne({ name: stockName, user: req.user.id });
+
+    if (existingStock) {
+        // Stock exists, update its quantity
+        existingStock.quantity += stockQuantity;
+        existingStock.price = stockPrice; // Update price if needed
+        existingStock.change = stockChange; // Update change if needed
+        existingStock.changePercent = stockChangePercent; // Update changePercent if needed
+        await existingStock.save();
+    } else {
+        // Stock does not exist, create a new stock entry
+        existingStock = new Stock({
+            name: stockName,
+            price: stockPrice,
+            quantity: stockQuantity,
+            change: stockChange,
+            changePercent: stockChangePercent,
+            user: req.user.id,
+        });
+        await existingStock.save();
+    }
+
+    res.status(200).json(existingStock);
 });
 
-const updateStock = asyncHandler(async (req, res) => {
-    const stock = await Stock.findById(req.params.id);
+const sellStock = asyncHandler(async (req, res) => {
+    const { stockId, quantity } = req.body;
+    console.log(req.body);
 
-    if (!stock) {
-        return res.status(404).json({ message: 'Stock not found' });
+    if (!stockId || !quantity) {
+        return res.status(400).json({ message: 'Invalid data' });
     }
 
     if (!req.user) {
         return res.status(401).json({ message: 'User not authorized' });
     }
 
-    if (stock.user.toString() !== req.user.id) {
-        return res.status(401).json({ message: 'User not authorized' });
+    const existingStock = await Stock.findOne({ _id: stockId });
+
+    if (!existingStock) {
+        return res.status(400).json({ message: 'Stock not found' });
     }
 
-    const updatedStock = await Stock.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (existingStock.quantity < quantity) {
+        return res.status(400).json({ message: 'Not enough stock to sell' });
+    }
 
-    res.status(200).json(updatedStock);
+    existingStock.quantity -= quantity;
+
+    if (existingStock.quantity === 0) {
+        await existingStock.remove();
+        return res.status(200).json({ message: 'Stock sold out' });
+    }
+
+    await existingStock.save();
+
+    res.status(200).json(existingStock);
 });
 
-const deleteStock = asyncHandler(async (req, res) => {
-    const stock = await Stock.findById(req.params.id);
-
-    if (!stock) {
-        return res.status(404).json({ message: 'Stock not found' });
-    }
-
-    if (!req.user) {
-        return res.status(401).json({ message: 'User not authorized' });
-    }
-
-    if (stock.user.toString() !== req.user.id) {
-        return res.status(401).json({ message: 'User not authorized' });
-    }
-
-    await stock.deleteOne();
-
-    res.status(200).json({ message: `Stock removed ${req.params.id}` });
-});
-
-module.exports = { getStocks, setStock, updateStock, deleteStock, getAllStocks, getStockBySymbol };
+module.exports = { getStocks, buyStock, sellStock, getAllStocks, getStockBySymbol };

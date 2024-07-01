@@ -43,12 +43,13 @@ const getStocksBySymbol = async (symbol, token) => {
 
 // Sell stock
 const sellStock = async (stockId, token) => {
+    console.log(stockId.stockId);
     const config = {
         headers: {
             Authorization: `Bearer ${token}`,
         },
     };
-    const response = await axios.delete(API_URL + stockId, config);
+    const response = await axios.post(API_URL + stockId.stockId, stockId, config);
     return response.data;
 }
 

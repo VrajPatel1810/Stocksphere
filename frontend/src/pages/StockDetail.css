@@ -1,12 +1,25 @@
 .stock-detail-container {
   text-align: center;
   padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  margin: 20px auto;
+  width: 80%;
 }
 
-.stock-price,
-.stock-change {
-  margin-top: 10px;
+.stock-detail-container h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.stock-price {
   font-size: 1.5em;
+  margin: 10px 0;
+}
+
+.stock-change {
+  font-size: 1.2em;
+  margin: 10px 0;
 }
 
 .stock-change.positive {
@@ -17,34 +30,37 @@
   color: #e74c3c;
 }
 
-.chart-container {
-  margin: 20px auto;
-  width: 80%;
-}
-
-.buy-sell-container {
-  margin: 20px auto;
+.buy-stock-form {
+  margin-top: 20px;
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: center;
 }
 
-.buy-sell-container input {
+.buy-stock-form label {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.buy-stock-form input {
+  margin-bottom: 10px;
   padding: 10px;
-  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100px;
+  text-align: center;
 }
 
-.buy-sell-container button {
-  padding: 10px 20px;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.buy-stock-form .btn {
   background-color: #21bf73;
   color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.buy-sell-container button:hover {
+.buy-stock-form .btn:hover {
   background-color: #1e9b60;
 }
