@@ -5,24 +5,52 @@ const allstockSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    symbol: {
+        type: String,
+        required: true,
+    },
     price: {
         type: Number,
         required: true
     },
-    change: {
+    odchange : {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    ftwhigh: {
         type: Number,
         required: true
     },
-    changePercent: {
+    ftwlow: {
+        type: Number,
+        required: true
+    },
+    oychange: {
+        type: Number,
+        required: true
+    },
+    fychange: {
+        type: Number,
+        required: true
+    },
+    marcap: {
+        type: Number,
+        required: true
+    },
+    volume: {
+        type: Number,
+        required: true
+    },
+    avgvolume: {
+        type: Number,
+        required: true
+    },
+    divyield: {
         type: Number,
         required: true
     },
 },
-    //,
-    // createdAt: {
-    //     type: Date,
-    //     default: Date.now
-    // } 
     {
         timestamps: true
     }

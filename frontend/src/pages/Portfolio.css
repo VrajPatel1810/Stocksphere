@@ -59,7 +59,7 @@ body {
   .stock-price,
   .stock-quantity {
     margin-top: 10px;
-    font-size: 1em; /* Ensures uniform font size */
+    font-size: 1.2em; /* Ensures uniform font size */
     color: #ffffff; /* Ensures white text color */
   }
   

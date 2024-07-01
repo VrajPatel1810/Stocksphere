@@ -68,7 +68,7 @@ function Portfolio() {
                                         type="number"
                                         id={`quantity-${stock._id}`}
                                         value={sellQuantities[stock._id] || ''}
-                                        onChange={(e) => setSellQuantities({ ...sellQuantities, [stock._id]: Math.max(1, Math.min(e.target.value, stock.quantity)) })}
+                                        onChange={(e) => setSellQuantities({ ...sellQuantities, [stock._id]: Math.max(0, Math.min(e.target.value, stock.quantity)) })}
                                         min="1"
                                         max={stock.quantity}
                                     />

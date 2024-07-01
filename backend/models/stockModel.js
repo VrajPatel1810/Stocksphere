@@ -5,6 +5,10 @@ const stockSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    symbol: {
+        type: String,
+        required: true
+    },
     price: {
         type: Number,
         required: true
@@ -13,14 +17,6 @@ const stockSchema = new mongoose.Schema({
         type: Number,
         required: true,
         default: 0
-    },
-    change: {
-        type: Number,
-        default: 0 // Make this optional with a default value
-    },
-    changePercent: {
-        type: Number,
-        default: 0 // Make this optional with a default value
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,

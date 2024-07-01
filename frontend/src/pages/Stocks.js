@@ -33,15 +33,15 @@ function Stocks() {
             <p>{message}</p>
           ) : (
             Array.isArray(stocks) && stocks.map((stock) => (
-              <Link to={`/stocks/${stock.name}`} key={stock._id} className="stock-link">
+              <Link to={`/stocks/${stock.symbol}`} key={stock._id} className="stock-link">
                 <div className="stock-item">
                   <div className="stock-left">
                     <div className="stock-name">{stock.name}</div>
                   </div>
                   <div className="stock-right">
                     <div className="stock-price">Price: ${stock.price}</div>
-                    <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-                      1D: {stock.changePercent}%
+                    <div className={`stock-change ${stock.odchange > 0 ? 'positive' : 'negative'}`}>
+                      1D: {stock.odchange}%
                     </div>
                   </div>
                 </div>

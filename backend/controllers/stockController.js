@@ -10,7 +10,7 @@ const getAllStocks = asyncHandler(async (req, res) => {
 
 const getStockBySymbol = asyncHandler(async (req, res) => {
     const { symbol } = req.params;
-    const stocks = await allStock.find({ name: symbol });
+    const stocks = await allStock.find({ symbol: symbol });
 
     if (!stocks) {
         res.status(404);
@@ -34,7 +34,8 @@ const getStocks = asyncHandler(async (req, res) => {
 });
 
 const buyStock = asyncHandler(async (req, res) => {
-    if (!req.body.name || !req.body.price || !req.body.quantity) {
+    console.log(req.body);
+    if (!req.body.name || !req.body.symbol || !req.body.price || !req.body.quantity) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
@@ -43,28 +44,23 @@ const buyStock = asyncHandler(async (req, res) => {
     }
 
     const stockName = req.body.name;
+    const stockSymbol = req.body.symbol;
     const stockPrice = req.body.price;
     const stockQuantity = req.body.quantity;
-    const stockChange = req.body.change || 0; // Set default value if not provided
-    const stockChangePercent = req.body.changePercent || 0; // Set default value if not provided
 
-    let existingStock = await Stock.findOne({ name: stockName, user: req.user.id });
+    let existingStock = await Stock.findOne({ symbol: stockSymbol, user: req.user.id });
 
     if (existingStock) {
         // Stock exists, update its quantity
         existingStock.quantity += stockQuantity;
-        existingStock.price = stockPrice; // Update price if needed
-        existingStock.change = stockChange; // Update change if needed
-        existingStock.changePercent = stockChangePercent; // Update changePercent if needed
         await existingStock.save();
     } else {
         // Stock does not exist, create a new stock entry
         existingStock = new Stock({
             name: stockName,
+            symbol: stockSymbol,
             price: stockPrice,
             quantity: stockQuantity,
-            change: stockChange,
-            changePercent: stockChangePercent,
             user: req.user.id,
         });
         await existingStock.save();
@@ -75,8 +71,7 @@ const buyStock = asyncHandler(async (req, res) => {
 
 const sellStock = asyncHandler(async (req, res) => {
     const { stockId, quantity } = req.body;
-    console.log(req.body);
-
+    
     if (!stockId || !quantity) {
         return res.status(400).json({ message: 'Invalid data' });
     }

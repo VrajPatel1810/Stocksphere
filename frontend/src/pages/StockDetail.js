@@ -25,9 +25,9 @@ function StockDetail() {
   const handleBuyStock = (e) => {
     e.preventDefault();
     if (quantity > 0) {
-      const stock = stocks.find(stock => stock.name === symbol);
+      const stock = stocks.find(stock => stock.symbol === symbol);
       if (stock) {
-        dispatch(buyStock({ name: stock.name, price: stock.price, quantity }));
+        dispatch(buyStock({ name: stock.name, symbol: stock.symbol, price: stock.price, quantity }));
       }
     }
   };
@@ -82,8 +82,8 @@ function StockDetail() {
     <div className="stock-detail-container">
       <h2>{stock.name}</h2>
       <div className="stock-price">Price: ${stock.price}</div>
-      <div className={`stock-change ${stock.change > 0 ? 'positive' : 'negative'}`}>
-        1D: {stock.changePercent}%
+      <div className={`stock-change ${stock.odchange > 0 ? 'positive' : 'negative'}`}>
+        1D: {stock.odchange}%
       </div>
       <Stack direction="row" spacing={2} sx={{ marginBottom: '20px' }}>
         <Box sx={{ flexGrow: 1 }}>
@@ -110,27 +110,27 @@ function StockDetail() {
       <div className="statistics-container">
         <div className="statistic-box">
           <div className="statistic-label">52W High</div>
-          <div className="statistic-value">${stock.high52}</div>
+          <div className="statistic-value">${stock.ftwhigh}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">52W Low</div>
-          <div className="statistic-value">${stock.low52}</div>
+          <div className="statistic-value">${stock.ftwlow}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">1Y</div>
-          <div className={`statistic-value ${stock.changePercent1Year > 0 ? 'positive' : 'negative'}`}>
-            {stock.changePercent1Year}%
+          <div className={`statistic-value ${stock.oychange > 0 ? 'positive' : 'negative'}`}>
+            {stock.oychange}%
           </div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">5Y</div>
-          <div className={`statistic-value ${stock.changePercent5Years > 0 ? 'positive' : 'negative'}`}>
-            {stock.changePercent5Years}%
+          <div className={`statistic-value ${stock.fychange > 0 ? 'positive' : 'negative'}`}>
+            {stock.fychange}%
           </div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">Market Cap</div>
-          <div className="statistic-value">${stock.marketCap}</div>
+          <div className="statistic-value">${stock.marcap}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">Volume</div>
@@ -138,11 +138,11 @@ function StockDetail() {
         </div>
         <div className="statistic-box">
           <div className="statistic-label">Avg. Volume</div>
-          <div className="statistic-value">{stock.avgVolume}</div>
+          <div className="statistic-value">{stock.avgvolume}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">Dividend Yield</div>
-          <div className="statistic-value">{stock.dividendYield}%</div>
+          <div className="statistic-value">{stock.divyield}%</div>
         </div>
       </div>
 
