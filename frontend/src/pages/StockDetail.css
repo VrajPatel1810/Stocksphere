@@ -1,66 +1,122 @@
 .stock-detail-container {
-  text-align: center;
-  padding: 20px;
-  background-color: #1e1e1e;
-  border-radius: 10px;
-  margin: 20px auto;
-  width: 80%;
-}
-
-.stock-detail-container h2 {
-  font-size: 2em;
-  margin-bottom: 10px;
-}
-
-.stock-price {
-  font-size: 1.5em;
-  margin: 10px 0;
-}
-
-.stock-change {
-  font-size: 1.2em;
-  margin: 10px 0;
-}
-
-.stock-change.positive {
-  color: #21bf73;
-}
-
-.stock-change.negative {
-  color: #e74c3c;
-}
-
-.buy-stock-form {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.buy-stock-form label {
-  margin-bottom: 10px;
-  font-size: 1.2em;
-}
-
-.buy-stock-form input {
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100px;
-  text-align: center;
-}
-
-.buy-stock-form .btn {
-  background-color: #21bf73;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.buy-stock-form .btn:hover {
-  background-color: #1e9b60;
-}
+    text-align: center;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 80%;
+  }
+  
+  .stock-detail-container h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .stock-price {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+  
+  .stock-change {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+  
+  .stock-change.positive {
+    color: #21bf73;
+  }
+  
+  .stock-change.negative {
+    color: #e74c3c;
+  }
+  
+  .buy-stock-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .buy-stock-form label {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+  }
+  
+  .buy-stock-form input {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100px;
+    text-align: center;
+  }
+  
+  .buy-stock-form .btn {
+    background-color: #21bf73;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buy-stock-form .btn:hover {
+    background-color: #1e9b60;
+  }
+  
+  .statistics-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  
+  .statistic-box {
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .statistic-label {
+    font-size: 1em;
+    margin-bottom: 5px;
+  }
+  
+  .statistic-value {
+    font-size: 1em;
+  }
+  
+  .statistic-value.positive {
+    color: #21bf73;
+  }
+  
+  .statistic-value.negative {
+    color: #e74c3c;
+  }
+  
+  .time-period-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .time-period-button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .time-period-button.active {
+    background-color: #21bf73;
+  }
+  
