@@ -22,32 +22,40 @@ function Graph(props) {
     };
 
     // Helper function to get the date from a specified period
-    const getDateFromPeriod = (period) => {
-        const currentDate = new Date();
+    const getDateFromPeriod = (period, endDate) => {
+        const startDate = new Date(endDate);
         switch (period) {
             case '1W':
-                return new Date(currentDate.setDate(currentDate.getDate() - 7));
+                startDate.setDate(startDate.getDate() - 8); // Last 7 days including endDate
+                break;
             case '1M':
-                return new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+                startDate.setMonth(startDate.getMonth() - 1);
+                break;
             case '3M':
-                return new Date(currentDate.setMonth(currentDate.getMonth() - 3));
+                startDate.setMonth(startDate.getMonth() - 3);
+                break;
             case '6M':
-                return new Date(currentDate.setMonth(currentDate.getMonth() - 6));
+                startDate.setMonth(startDate.getMonth() - 6);
+                break;
             case '1Y':
-                return new Date(currentDate.setFullYear(currentDate.getFullYear() - 1));
+                startDate.setFullYear(startDate.getFullYear() - 1);
+                break;
             case '5Y':
-                return new Date(currentDate.setFullYear(currentDate.getFullYear() - 5));
+                startDate.setFullYear(startDate.getFullYear() - 5);
+                break;
             default:
-                return currentDate;
+                break;
         }
+        return startDate;
     };
 
     // Filter and map data based on time period
     const filterDataByTimePeriod = (data, period) => {
-        const startDate = getDateFromPeriod(period);
+        const endDate = new Date(data[data.length - 1]?.date); // Use the last date in the data
+        const startDate = getDateFromPeriod(period, endDate);
 
         return data
-            .filter(d => new Date(d.date) >= startDate)
+            .filter(d => new Date(d.date) >= startDate && new Date(d.date) <= endDate)
             .map(d => d.close);
     };
 
