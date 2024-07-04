@@ -6,7 +6,6 @@ const User = require('../models/userModel');
 const asyncHandler = require('express-async-handler');
 
 const registerUser =  asyncHandler(async(req, res) => {
-    console.log('Request Body:', req.body); // Check the request body in the console
 
     const { firstName, middleName, lastName, email, phoneNumber, panCardNumber, aadharCardNumber, password, confirmPassword } = req.body;
 

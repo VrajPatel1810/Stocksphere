@@ -34,7 +34,6 @@ const getStocks = asyncHandler(async (req, res) => {
 });
 
 const buyStock = asyncHandler(async (req, res) => {
-    console.log(req.body);
     if (!req.body.name || !req.body.symbol || !req.body.price || !req.body.quantity) {
         return res.status(400).json({ message: 'Invalid data' });
     }
@@ -93,7 +92,7 @@ const sellStock = asyncHandler(async (req, res) => {
     existingStock.quantity -= quantity;
 
     if (existingStock.quantity === 0) {
-        await existingStock.remove();
+        await Stock.findByIdAndDelete(existingStock._id);
         return res.status(200).json({ message: 'Stock sold out' });
     }
 

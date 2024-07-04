@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/stocks', require('./routes/stockRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/hist', require('./routes/histRoutes'));
 
 app.use(errorHandler);
 
