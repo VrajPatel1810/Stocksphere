@@ -64,7 +64,7 @@ function Graph(props) {
                     <Box className="graph-box" sx={{ flexGrow: 1 }}>
                         <SparkLineChart
                             data={selectedData}
-                            height={200}
+                            height={400}
                             color="#21bf73"
                             showHighlight={true}
                             showTooltip={true}
@@ -75,12 +75,12 @@ function Graph(props) {
             )}
 
             <div className="time-period-buttons">
-                <button className={`time-period-button ${timePeriod === '1W' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1W')}>1 Week</button>
-                <button className={`time-period-button ${timePeriod === '1M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1M')}>1 Month</button>
-                <button className={`time-period-button ${timePeriod === '3M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('3M')}>3 Months</button>
-                <button className={`time-period-button ${timePeriod === '6M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('6M')}>6 Months</button>
-                <button className={`time-period-button ${timePeriod === '1Y' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1Y')}>1 Year</button>
-                <button className={`time-period-button ${timePeriod === '5Y' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('5Y')}>5 Years</button>
+                <button className={`time-period-button ${timePeriod === '1W' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1W')}>1W</button>
+                <button className={`time-period-button ${timePeriod === '1M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1M')}>1M</button>
+                <button className={`time-period-button ${timePeriod === '3M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('3M')}>3M</button>
+                <button className={`time-period-button ${timePeriod === '6M' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('6M')}>6M</button>
+                <button className={`time-period-button ${timePeriod === '1Y' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('1Y')}>1Y</button>
+                <button className={`time-period-button ${timePeriod === '5Y' ? 'active' : ''}`} onClick={() => handleTimePeriodChange('5Y')}>5Y</button>
             </div>
         </div>
     );

@@ -41,7 +41,7 @@ function StockDetail() {
   return (
     <div className="stock-detail-container">
       <h2>{stock.name}</h2>
-      <div className="stock-price">Price: ${stock.price}</div>
+      <div className="stock-price">Price: ₹{stock.price}</div>
       <div className={`stock-change ${stock.odchange > 0 ? 'positive' : 'negative'}`}>
         1D: {stock.odchange}%
       </div>
@@ -51,11 +51,11 @@ function StockDetail() {
       <div className="statistics-container">
         <div className="statistic-box">
           <div className="statistic-label">52W High</div>
-          <div className="statistic-value">${stock.ftwhigh}</div>
+          <div className="statistic-value">₹{stock.ftwhigh}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">52W Low</div>
-          <div className="statistic-value">${stock.ftwlow}</div>
+          <div className="statistic-value">₹{stock.ftwlow}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">1Y</div>
@@ -70,8 +70,8 @@ function StockDetail() {
           </div>
         </div>
         <div className="statistic-box">
-          <div className="statistic-label">Market Cap</div>
-          <div className="statistic-value">${stock.marcap}</div>
+          <div className="statistic-label">Market Cap (In Billion)</div>
+          <div className="statistic-value">₹{stock.marcap}</div>
         </div>
         <div className="statistic-box">
           <div className="statistic-label">Volume</div>

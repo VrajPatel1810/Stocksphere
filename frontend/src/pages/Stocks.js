@@ -50,7 +50,7 @@ function Stocks() {
                     <div className="stock-name">{stock.name}</div>
                   </div>
                   <div className="stock-right">
-                    <div className="stock-price">Price: ${stock.price}</div>
+                    <div className="stock-price">Price: ₹{stock.price}</div>
                     <div className={`stock-change ${stock.odchange > 0 ? 'positive' : 'negative'}`}>
                       1D: {stock.odchange}%
                     </div>
