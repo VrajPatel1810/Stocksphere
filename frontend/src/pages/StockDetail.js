@@ -14,6 +14,7 @@ function StockDetail() {
   const { user } = useSelector(state => state.auth);
 
   const [quantity, setQuantity] = useState(0);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     dispatch(getStocksBySymbol(symbol));
@@ -24,14 +25,23 @@ function StockDetail() {
     if (quantity > 0) {
       const stock = stocks.find(stock => stock.symbol === symbol);
       if (stock) {
+        const totalPrice = stock.price * quantity;
         dispatch(buyStock({ name: stock.name, symbol: stock.symbol, price: stock.price, quantity }));
         setQuantity(0); // Reset quantity after buying stock
+        showNotification(quantity, stock.name, totalPrice);
       }
     }
   };
 
+  const showNotification = (quantity, stockName, totalPrice) => {
+    setNotification(`Your purchase of ${quantity} units of ${stockName} worth ₹${totalPrice} is confirmed`);
+    setTimeout(() => {
+      setNotification(null);
+    }, 2000);
+  };
+
   if (isLoading) return <Spinner />;
-  
+
   if (isError) return <div>{message}</div>;
 
   const stock = stocks.length > 0 ? stocks[0] : null;
@@ -46,8 +56,8 @@ function StockDetail() {
         1D: {stock.odchange}%
       </div>
 
-      <Graph symbol={stock.symbol}/>
-      
+      <Graph symbol={stock.symbol} />
+
       <div className="statistics-container">
         <div className="statistic-box">
           <div className="statistic-label">52W High</div>
@@ -100,6 +110,8 @@ function StockDetail() {
           <button type="submit" className="btn">Buy Stock</button>
         </form>
       )}
+
+      {notification && <div className="notification">{notification}</div>}
     </div>
   );
 }
