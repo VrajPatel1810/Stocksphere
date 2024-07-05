@@ -10,6 +10,7 @@ function Stocks() {
   const dispatch = useDispatch();
   const { stocks, isLoading, isError, message } = useSelector((state) => state.stocks);
   const [randomStocks, setRandomStocks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     dispatch(getAllStocks());
@@ -23,9 +24,15 @@ function Stocks() {
 
   useEffect(() => {
     if (stocks.length > 0) {
-      setRandomStocks(getRandomStocks(stocks, 15));
+      // Filter stocks based on search term
+      const filteredStocks = stocks.filter(stock =>
+        stock.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      // Set a random subset of 15 stocks from filtered results
+      setRandomStocks(getRandomStocks(filteredStocks, 15));
     }
-  }, [stocks]);
+  }, [stocks, searchTerm]);
 
   const getRandomStocks = (stocks, num) => {
     const shuffled = [...stocks].sort(() => 0.5 - Math.random());
@@ -36,12 +43,23 @@ function Stocks() {
     <div className="stocks-container">
       <Navbar />
       <div className="stocks-content">
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search stocks..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-bar"
+          />
+        </div>
         <h2>Available Stocks</h2>
         <div className="stocks-list">
           {isLoading ? (
             <Spinner />
           ) : isError ? (
             <p>{message}</p>
+          ) : randomStocks.length === 0 ? (
+            <p>No stocks found.</p>
           ) : (
             randomStocks.map((stock) => (
               <Link to={`/stocks/${stock.symbol}`} key={stock._id} className="stock-link">

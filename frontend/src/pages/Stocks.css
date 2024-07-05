@@ -123,3 +123,28 @@ body {
 .stock-change.negative {
   color: #e74c3c;
 }
+
+.search-bar {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px; /* Oval-shaped (capsule-like) */
+    border: 1px solid #ccc;
+    font-size: 1em;
+    box-sizing: border-box;
+    max-width: 1000px; /* Adjust maximum width as needed */
+    height: 40px;
+}
+  
+  @media (max-width: 768px) {
+    .stocks-container {
+      padding: 0;
+    }
+  
+    .stocks-list {
+      width: 100%;
+    }
+  
+    .stock-item {
+      width: 95%;
+    }
+  }
