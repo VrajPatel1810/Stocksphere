@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getStocksBySymbol, buyStock } from '../features/stocks/stockSlice';
 import Spinner from '../components/Spinner';
 import Graph from '../components/Graph';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './StockDetail.css';
 
 function StockDetail() {
@@ -14,7 +16,6 @@ function StockDetail() {
   const { user } = useSelector(state => state.auth);
 
   const [quantity, setQuantity] = useState(0);
-  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     dispatch(getStocksBySymbol(symbol));
@@ -26,18 +27,16 @@ function StockDetail() {
       const stock = stocks.find(stock => stock.symbol === symbol);
       if (stock) {
         const totalPrice = stock.price * quantity;
-        dispatch(buyStock({ name: stock.name, symbol: stock.symbol, price: stock.price, quantity }));
-        setQuantity(0); // Reset quantity after buying stock
-        showNotification(quantity, stock.name, totalPrice);
+        dispatch(buyStock({ name: stock.name, symbol: stock.symbol, price: stock.price, quantity }))
+          .then(() => {
+            setQuantity(0); // Reset quantity after buying stock
+            toast.success(`Your purchase of ${quantity} units of ${stock.name} worth ₹${totalPrice} is confirmed`);
+          })
+          .catch(error => {
+            toast.error(`Error: ${error.message}`);
+          });
       }
     }
-  };
-
-  const showNotification = (quantity, stockName, totalPrice) => {
-    setNotification(`Your purchase of ${quantity} units of ${stockName} worth ₹${totalPrice} is confirmed`);
-    setTimeout(() => {
-      setNotification(null);
-    }, 2000);
   };
 
   if (isLoading) return <Spinner />;
@@ -111,7 +110,8 @@ function StockDetail() {
         </form>
       )}
 
-      {notification && <div className="notification">{notification}</div>}
+      <ToastContainer position="top-right" autoClose={2000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
     </div>
   );
 }

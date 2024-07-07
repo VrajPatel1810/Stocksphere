@@ -120,7 +120,7 @@
     background-color: #21bf73;
   }
   
-  .notification {
+  /* .notification {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -129,8 +129,8 @@
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it's above other content */
-    animation: fadeOut 9s ease-out; /* Animation to fade out */
+    z-index: 1000; 
+    animation: fadeOut 9s ease-out;
   }
   
   @keyframes fadeOut {
@@ -141,4 +141,4 @@
       opacity: 0;
       display: none;
     }
-  }
+  } */
