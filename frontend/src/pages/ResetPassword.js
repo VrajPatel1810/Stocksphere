@@ -7,6 +7,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './ResetPassword.css';
 
 function ResetPassword() {
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
     const [formData, setFormData] = useState({
         newPassword: '',
         confirmNewPassword: ''
@@ -53,6 +56,14 @@ function ResetPassword() {
         }
     }, [isError, isSuccess, message, dispatch, navigate]);
 
+    const toggleNewPasswordVisibility = () => {
+        setShowNewPassword(!showNewPassword);
+    };
+
+    const toggleConfirmNewPasswordVisibility = () => {
+        setShowConfirmNewPassword(!showConfirmNewPassword);
+    };
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -64,7 +75,7 @@ function ResetPassword() {
                 <form onSubmit={onSubmit}>
                     <div className="input-group">
                         <input
-                            type="password"
+                            type={showNewPassword ? "text" : "password"}
                             placeholder="New Password"
                             id="newPassword"
                             value={newPassword}
@@ -73,10 +84,17 @@ function ResetPassword() {
                             required
                             autoComplete="new-password"
                         />
+                        <button
+                            type="button"
+                            onClick={toggleNewPasswordVisibility}
+                            className="toggle-password-btn"
+                        >
+                            <i className={showNewPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
+                        </button>
                     </div>
                     <div className="input-group">
                         <input
-                            type="password"
+                            type={showConfirmNewPassword ? "text" : "password"}
                             placeholder="Confirm New Password"
                             id="confirmNewPassword"
                             value={confirmNewPassword}
@@ -85,6 +103,13 @@ function ResetPassword() {
                             required
                             autoComplete="new-password"
                         />
+                        <button
+                            type="button"
+                            onClick={toggleConfirmNewPasswordVisibility}
+                            className="toggle-password-btn"
+                        >
+                            <i className={showConfirmNewPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i>
+                        </button>
                     </div>
                     <button type='submit' className="btn reset-password-btn">Reset Password</button>
                 </form>

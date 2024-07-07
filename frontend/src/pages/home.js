@@ -52,7 +52,7 @@ function Home() {
       </main>
       <footer>
         <div className="footer-content">
-          <p>Contact us at <a href="mailto:reachstocksphere@gmail.com" className="email">reachstocksphere@gmail.com</a></p>
+          <p>Contact us at <a href="mailto:contactstocksphere@gmail.com" className="email">contactstocksphere@gmail.com</a></p>
         </div>
       </footer>
     </div>
