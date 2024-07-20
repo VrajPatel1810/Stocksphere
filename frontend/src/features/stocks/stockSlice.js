@@ -53,10 +53,10 @@ export const getStocksBySymbol = createAsyncThunk('stocks/getStocksBySymbol', as
 });
 
 // Sell stocks
-export const sellStock = createAsyncThunk('stocks/sellStock', async (stockId, thunkAPI) => {
+export const sellStock = createAsyncThunk('stocks/sellStock', async (stockData, thunkAPI) => {
     try {
         const token = thunkAPI.getState().auth.user.token;
-        return await stockService.sellStock(stockId, token);
+        return await stockService.sellStock(stockData, token);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue({ message });
@@ -82,7 +82,12 @@ export const stockSlice = createSlice({
             .addCase(buyStock.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.stocks.push(action.payload);
+                const existingStock = state.stocks.find(stock => stock._id === action.payload._id);
+                if (existingStock) {
+                    existingStock.quantity = action.payload.quantity;
+                } else {
+                    state.stocks.push(action.payload);
+                }
             })
             .addCase(buyStock.rejected, (state, action) => {
                 state.isLoading = false;
@@ -108,7 +113,13 @@ export const stockSlice = createSlice({
             .addCase(sellStock.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.isSuccess = true;
-                state.stocks = state.stocks.filter(stock => stock._id !== action.payload._id);
+                const stock = state.stocks.find(stock => stock._id === action.payload._id);
+                if (stock) {
+                    stock.quantity = action.payload.quantity;
+                    if (stock.quantity === 0) {
+                        state.stocks = state.stocks.filter(stock => stock._id !== action.payload._id);
+                    }
+                }
             })
             .addCase(sellStock.rejected, (state, action) => {
                 state.isLoading = false;
@@ -141,7 +152,6 @@ export const stockSlice = createSlice({
                 state.isError = true;
                 state.message = action.payload.message;
             });
-
     },
 });
 
